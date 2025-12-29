@@ -60,4 +60,4 @@ class Dataset(HFDSLoader):
 
 if __name__ == "__main__":
     dataset = Dataset().get_train()
-    dataset[0:2].pprint()
+    dataset[0:3].pprint()
