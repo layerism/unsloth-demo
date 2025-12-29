@@ -1,0 +1,10 @@
+{% for message in messages %}
+{% if loop.first and message['role'] == 'system' %}
+<|im_start|>system
+{{ message['content'] }}<|im_end|>
+{% else %}
+<|im_start|>{{ message['role'] }}
+{{ message['content'] }}<|im_end|>
+{% endif %}
+{% endfor %}
+<|im_start|>assistant\n<think>\n\n</think>\n\n
