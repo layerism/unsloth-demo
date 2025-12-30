@@ -46,7 +46,7 @@ class SFTArgs(BaseArgs):
     # --------- model args ---------
     model: str = "unsloth/Qwen3-1.7B"
     device: int = 0
-    max_seq_length: int = 2048
+    max_seq_length: int = 4096
     dtype: Optional[str] = None
     load_in_4bit: bool = False
     load_in_8bit: bool = False
@@ -55,8 +55,8 @@ class SFTArgs(BaseArgs):
     train_datasets: List[Tuple[str, float]] = field(
         default_factory=lambda: [
             # ("common/sft-common", 0.1),
-            # ("common/catgirl", 0.1),
-            ("common/ruozhiba", 1.0),
+            # ("common/ruozhiba", 0.1),
+            ("common/chumor", 1.0),
         ]
     )
 
@@ -85,15 +85,15 @@ class SFTArgs(BaseArgs):
     optim: str = "adamw_torch_fused"
     dataset_num_proc: int = 1
     packing: bool = True
-    num_train_epochs: int = 10
-    per_device_train_batch_size: int = 8
+    num_train_epochs: int = 25  # 训练轮数
+    per_device_train_batch_size: int = 4  # 每个设备的 batch size
     gradient_accumulation_steps: int = 1
     lr_scheduler_type: str = "cosine"
-    warmup_steps: int = 25
+    warmup_steps: int = 50  # 用 200 个样本热身
     warmup_ratio: float = 0.05
     learning_rate: float = 5e-5
     max_grad_norm: float = 1.0
-    train_on_responses_only: bool = False
+    train_on_responses_only: bool = True
 
     # --------- logging & saving args ---------
     max_steps: int = -1

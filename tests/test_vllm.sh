@@ -1,8 +1,11 @@
 #!/bin/bash
+CUDA_VISIBLE_DEVICES=7
 
-VLLM_USE_V1=0 vllm serve $1 \
+python -m vllm.entrypoints.openai.api_server \
+    --model $1 \
     --host 0.0.0.0 \
     --port $3 \
+    --max-model-len 8192 \
     --enable-lora \
     --lora-modules unsloth-model=$2 \
     --served-model-name unsloth-model \

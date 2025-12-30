@@ -36,7 +36,6 @@ class Dataset(HFDSLoader):
         self,
         cache_dir="/tmp/lccc",
         download_mode="reuse_cache_if_exists",
-        limit: int = 8,
         **kwargs,
     ) -> None:
         """
@@ -65,11 +64,6 @@ class Dataset(HFDSLoader):
         self.validation = self.dataset["validation"]
         self.test = self.dataset["test"]
         self.all = self.dataset["train"]
-
-        if limit > 0:
-            self.train = self.train.shuffle(seed=42).select(range(0, limit))
-            self.validation = self.validation.shuffle(seed=42).select(range(0, limit))
-            self.test = self.test.shuffle(seed=42).select(range(0, limit))
 
     def process_data(self, sample: dict, phase: str = "train") -> dict:
         chat = sample["text"]

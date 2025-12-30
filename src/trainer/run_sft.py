@@ -1,7 +1,5 @@
+import json
 import os
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
-
 import random
 import re
 from importlib import import_module
@@ -22,7 +20,7 @@ from ..args import SFTArgs
 from ..datasets.hfds_ext import TK_HFDataset
 
 args = tyro.cli(SFTArgs)
-
+# os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 
 # 初始化 WandB run（可选，Trainer 也会自动 init）
 # swanlab.init(project=args.project, name=args.run_name, config=args.to_dict())
@@ -66,24 +64,35 @@ def import_data(args: SFTArgs):
 
 
 def formatting_func(example):
-    # plain = {k: example[k][0:2] for k in example}
-    # print(json.dumps(plain, ensure_ascii=False, indent=2))
-    # #print(len(plain['prompts']), len(plain['responses']))
+    # <|im_start|>system....<|im_end|><|im_start|>user....<|im_end|><|im_start|>assitant...<|im_end|>
+
+    context = example["context"]
+    prompt = example["prompt"]
+    chosen = example["chosen"]
+
+    if isinstance(context, str):
+        context = [context]
+
+    if isinstance(prompt, str):
+        prompt = [prompt]
+
+    if isinstance(chosen, str):
+        chosen = [chosen]
 
     prompts = []
-    for p, t, r in zip(example["prompt"], example["thought"], example["chosen"]):
-        messages = [
-            {"role": "system", "content": "请以弱智吧用户的思考方式，回答用户问题"},
-            {"role": "user", "content": p},
-            {"role": "assistant", "content": t + "\n\n回复: " + r},
-        ]
+    for c, p, r in zip(context, prompt, chosen):
+        c = json.loads(c)
+        messages = [{"role": "system", "content": "你现在是一个非常搞笑喜欢玩梗的大学生，名字叫做蔡徐坤"}]
+        messages.extend(c)
+        messages.extend([{"role": "user", "content": p}, {"role": "assistant", "content": r}])
         prompt = tokenizer.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=False,
+            enable_thinking=False,
         )
         prompts.append(prompt)
-        logger.info(repr(prompt))
+        # logger.info(repr(prompt))
 
     return prompts
 
@@ -125,7 +134,7 @@ if __name__ == "__main__":
     trainer = train_on_responses_only(
         trainer,
         instruction_part="<|im_start|>user\n",
-        response_part="<|im_start|>assistant\n<think>\n\n</think>\n\n",
+        response_part="<|im_start|>assistant\n",
     )
     trainer.train()
 
