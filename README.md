@@ -2,6 +2,7 @@
 1. 本课程使用 unsloth 作为 llm fintune 的工具，使用 vllm 作为大模型部署的工具。
 
 ## 环境依赖
+教师机器已经安装了环境，学生不需要安装了
 ```shell
 conda create -n unsloth python=3.11
 conda activate unsloth
