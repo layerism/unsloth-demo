@@ -2,7 +2,6 @@
 
 CUDA_VISIBLE_DEVICES=7 \
 VLLM_LOGGING_LEVEL=DEBUG \
-VLLM_USE_V1=0 \
 python -m vllm.entrypoints.openai.api_server \
     --model $1 \
     --host 0.0.0.0 \
@@ -12,8 +11,8 @@ python -m vllm.entrypoints.openai.api_server \
     --lora-modules joke_qwen3=$2 \
     --served-model-name joke_qwen3 \
     --tensor-parallel-size 1 \
-    --gpu-memory-utilization 0.4 \
+    --gpu-memory-utilization 0.8 \
     --trust-remote-code \
-    --chat-template "./tests/qwen3.jinja" \
     --enable-log-requests \
     --enable-log-outputs
+    #--chat-template "./tests/qwen3.jinja" \

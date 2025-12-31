@@ -44,7 +44,7 @@ class BaseArgs:
 @dataclass
 class SFTArgs(BaseArgs):
     # --------- model args ---------
-    model: str = "unsloth/Qwen3-8B"
+    model: str = "unsloth/Qwen3-1.7B"
     device: int = 0
     max_seq_length: int = 4096
     dtype: Optional[str] = None
