@@ -44,7 +44,7 @@ class BaseArgs:
 @dataclass
 class SFTArgs(BaseArgs):
     # --------- model args ---------
-    model: str = "unsloth/Qwen3-1.7B"
+    model: str = "unsloth/Qwen3-8B"
     device: int = 0
     max_seq_length: int = 4096
     dtype: Optional[str] = None
@@ -93,13 +93,13 @@ class SFTArgs(BaseArgs):
     warmup_ratio: float = 0.05
     learning_rate: float = 5e-5
     max_grad_norm: float = 1.0
-    train_on_responses_only: bool = True
+    train_on_responses_only: bool = False
 
     # --------- logging & saving args ---------
     max_steps: int = -1
     save_strategy: str = "epoch"
     save_steps: int = -1
-    save_total_limit: int = 5
+    save_total_limit: int = 10
     evaluation_strategy: str = "epoch"
     eval_steps: int = -1
     logging_strategy: str = "steps"
@@ -117,3 +117,4 @@ class SFTArgs(BaseArgs):
 
     def __post_init__(self):
         self.model = hf_get_or_download(self.model)
+        os.system(f"mv {self.output_dir} {self.output_dir}_old")

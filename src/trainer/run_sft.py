@@ -82,15 +82,17 @@ def formatting_func(example):
     prompts = []
     for c, p, r in zip(context, prompt, chosen):
         c = json.loads(c)
-        messages = [{"role": "system", "content": "你现在是一个非常搞笑喜欢玩梗的大学生"}]
+        messages = [{"role": "system", "content": "你现在是一个大学生，喜欢以冷笑话和玩梗方式回复用户"}]
         messages.extend(c)
         messages.extend([{"role": "user", "content": p}, {"role": "assistant", "content": r}])
         prompt = tokenizer.apply_chat_template(
             messages,
             tokenize=False,
             add_generation_prompt=False,
+            add_special_tokens=False,
             enable_thinking=False,
         )
+        prompt = prompt.replace("<think>\n\n</think>\n\n", "")
         prompts.append(prompt)
         logger.info(repr(prompt))
 
@@ -134,7 +136,7 @@ if __name__ == "__main__":
     trainer = train_on_responses_only(
         trainer,
         instruction_part="<|im_start|>user\n",
-        response_part="<think>\n\n</think>\n\n",
+        response_part="<|im_start|>assistant\n",
     )
     trainer.train()
 

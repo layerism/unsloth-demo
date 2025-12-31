@@ -2,6 +2,7 @@
 
 CUDA_VISIBLE_DEVICES=7 \
 VLLM_LOGGING_LEVEL=DEBUG \
+VLLM_USE_V1=0 \
 python -m vllm.entrypoints.openai.api_server \
     --model $1 \
     --host 0.0.0.0 \

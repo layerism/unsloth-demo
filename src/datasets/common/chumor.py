@@ -11,7 +11,7 @@ from ..hfds_ext import HFDSLoader
 class Dataset(HFDSLoader):
     def __init__(
         self,
-        cache_dir="/tmp/s001/chumor",
+        cache_dir="/tmp/ubuntu/chumor",
         download_mode="reuse_cache_if_exists",
         **kwargs,
     ) -> None:
@@ -47,6 +47,7 @@ class Dataset(HFDSLoader):
         chat = sample["chat"]
 
         context, user, assistant = chat[0:-2], chat[-2], chat[-1]
+        nothink = "\n<think>\n\n</think>\n\n"
 
         if context:
             for i in range(len(context)):
