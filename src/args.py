@@ -85,7 +85,7 @@ class SFTArgs(BaseArgs):
     optim: str = "adamw_torch_fused"
     dataset_num_proc: int = 1
     packing: bool = True
-    num_train_epochs: int = 25  # 训练轮数
+    num_train_epochs: int = 50  # 训练轮数
     per_device_train_batch_size: int = 4  # 每个设备的 batch size
     gradient_accumulation_steps: int = 1
     lr_scheduler_type: str = "cosine"
